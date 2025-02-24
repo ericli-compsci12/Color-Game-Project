@@ -1,104 +1,108 @@
-void GAMEMODE () {
-  
-   minim2 = new Minim (this);
-    minim3 = new Minim (this);
- Sound1 = minim2.loadFile("FAILURE.wav");
- Sound2 = minim3.loadFile("SUCCESS.wav");
- Input = minim.getLineIn();
-  background(255,255,255);
-  arrowFont = createFont("SansSerif", 70);
-  KidsMagazine = createFont("Kids Magazine.ttf",60);
- 
 
-   
+//--------------------------------------------------------------
+// Game mode: Main gameplay screen with falling colored text
+//--------------------------------------------------------------
+
+void GAMEMODE () {
+ //Screen layout
+ background(255,255,255);
+ arrowFont = createFont("SansSerif", 70);
+ KidsMagazine = createFont("Kids Magazine.ttf",60);
+ 
+ //Right Button
  fill(255,255,255);
  rect(450,0, 450,900);
  
+ //Text labelling the right button
  fill(0);
  textSize(60);
  textAlign(CENTER,CENTER);
  textFont(KidsMagazine);
  text("DON'T",675,100);
  text("MATCH",675,300);
+ 
+ //Left Button
  rect(0,0, 450,900);
  
+ //Text labelling the left button
  fill(255,255,255);
  textSize(60);
  textAlign(CENTER,CENTER);
  textFont(KidsMagazine);
  text("MATCH",225,200);
  
+ //Font for the falling words
  textSize(50);
  textFont(KidsMagazine);
  textAlign(CENTER,CENTER);
  
+ //Falling text animation
  if (!gameOver) {
-   
+    //Speed of falling increases with score
     yPosition += 0.8*score;
+    //Speed of rotation increased with score.
     angle2 += 0.025*score;
     
+    // Animated text properties
     pushMatrix();
+    //Ensures its falling from the middle.
     translate(width/2, yPosition);
     rotate(angle2);
     fill(currentColor);
     text(currentWord, 0, 0);
     popMatrix();
    
-    
-    if (yPosition > height) {
-      gameOver = true;
-    }
-  }
+   // End game if text reaches bottom(Time limited)
+   if (yPosition > height) {
+  gameOver = true;
+ }
+}
   
-  
-  
-  
-  if (gameOver) {
+  //When game ends,switch to gameover mode.
+  if (gameOver == true) {
    mode = 2;
   }
   
-  if (mouseY > height-100 && mouseY < height-50) {
-    boolean userChoice;
-    if (mouseX > 200 && mouseX < 350) {
-      userChoice = true; // Match
-    } else if (mouseX > 450 && mouseX < 600) {
-      userChoice = false; // Doesn't Match
-    } else {
-      return;
-    }
-    
-    if (userChoice == isMatching) {
-      score++;
-      Sound2.play();
-      generateNewPair();
-    } else {
-      gameOver = true;
-      Sound1.play();
-    }
-  }
+ 
+} 
+   
+   
+
+//--------------------------------------------------------------
+// Generates new word-color pair: 50% chance of being matching pair
+//--------------------------------------------------------------
   
   
-  
-}
 
 void generateNewPair() {
   currentWord = words[(int)random(words.length)];
   color wordColor = colors[(int)random(colors.length)];
   currentColor = wordColor;
   
+  // Randomly decide if pair should match(this makes sure its 50%)
   if (random(1) > 0.5) {
     currentColor = colorFromWord(currentWord);
     isMatching = true;
   } else {
+    // Ensure mismatch
     while (colorFromWord(currentWord) == currentColor) {
       currentColor = colors[(int)random(colors.length)];
     }
     isMatching = false;
   }
   
+  // Reset animation properties every time generating a new word
   yPosition = 0;
   angle2 = 0;
 }
+
+
+//--------------------------------------------------------------
+// Case statement
+// Converts color words to actual color values
+// Parameters: word - the color name to convert
+// Returns: corresponding color value
+//--------------------------------------------------------------
 
 color colorFromWord(String word) {
   switch(word) {

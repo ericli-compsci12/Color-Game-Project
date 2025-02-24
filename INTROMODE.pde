@@ -1,10 +1,15 @@
 
+//--------------------------------------------------------------
+// Intro mode: Displays animated title screen with GIF background
+//--------------------------------------------------------------
+
 void INTROMODE () {
+ //white background color
+ background(255,255,255);
+ arrowFont = createFont("SansSerif", 70);
  
-  
-  background(255,255,255);
-  arrowFont = createFont("SansSerif", 70);
-   NumberOfFrames = 30;
+ // GIF animation handling
+ NumberOfFrames = 30;
  gif = new PImage[NumberOfFrames];
  int i = 0;
  while( i < NumberOfFrames) {
@@ -16,7 +21,7 @@ void INTROMODE () {
  if (f == NumberOfFrames) f = 0;
 
  
-
+ //draw navigation button
  if (dist(800,800,mouseX,mouseY)<50) {
    fill(255,255,255);
    strokeWeight(2);
@@ -26,10 +31,10 @@ void INTROMODE () {
      strokeWeight(2);
    stroke(255, 255,255);
    }
-   
  circle(800,800,100);
- 
-   if (dist(800,800,mouseX,mouseY)<50) {
+   
+   //draw arrow in navigation button design
+if (dist(800,800,mouseX,mouseY)<50) {
    fill(0);
    textSize(90);
    textAlign(CENTER,CENTER);
@@ -41,8 +46,9 @@ void INTROMODE () {
    textAlign(CENTER,CENTER);
    textFont(arrowFont);
    text("→",800,795);
-   }
- 
+}
+
+ // Animated title text
  float currentSize = 60 + 30 * sin(angle);
  KidsMagazine = createFont("Kids Magazine.ttf",currentSize);
  fill(0, 191, 255);
@@ -52,5 +58,4 @@ void INTROMODE () {
  text("COLOR",450,250);
  text("CATCHER",450,450);
  angle += 0.30;
- 
 }
